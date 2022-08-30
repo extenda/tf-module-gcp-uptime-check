@@ -33,6 +33,7 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
   monitored_resource {
     type = lookup(each.value, "type", "uptime_url")
     labels = {
+      project_id = var.monitoring_project_id
       host = lookup(each.value, "hostname", null)
     }
   }
