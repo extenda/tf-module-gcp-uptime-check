@@ -19,7 +19,7 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
     validate_ssl   = (lookup(each.value, "check_type", null) == "HTTP" ? false : true)
     request_method = lookup(each.value, "request_method", "GET")
     dynamic "auth_info" {
-      for_each = lookup(each.value, "password", [])
+      for_each = length(lookup(each.value, "password", [])) >= 1 ? [1] : []
       content {
         password = lookup(each.value, "password", null)
         username = lookup(each.value, "username", null)
