@@ -27,6 +27,7 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
     }
     headers      = lookup(each.value, "headers", {})
     body         = lookup(each.value, "body", null)
+    mask_headers = lookup(each.value, "headers", {}) == {} ? false : true
     content_type = lookup(each.value, "content_type", null)
   }
 
@@ -39,12 +40,12 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
   }
 
   dynamic "content_matchers" {
-    for_each = lookup(each.value, "content", [])
+    for_each = length(lookup(each.value, "content", [])) >= 1 ? [1] : []
     content {
       content = lookup(each.value, "content", null)
       matcher = lookup(each.value, "matcher", null)
       json_path_matcher {
-        json_path    = lookup(each.value, "json_path", null)
+        json_path    = lookup(each.value, "json_path", "")
         json_matcher = lookup(each.value, "json_matcher", null)
       }
     }
