@@ -65,7 +65,7 @@ resource "google_monitoring_alert_policy" "uptime_check_alert_policy" {
       filter          = <<EOT
 metric.type="monitoring.googleapis.com/uptime_check/check_passed" AND metric.label.check_id="${google_monitoring_uptime_check_config.uptime_check_config[each.value.service_name].uptime_check_id}" AND resource.type="uptime_url"
       EOT
-      duration        = lookup(lookup(each.value, "alert", {}), "uptime_duration", "300s")
+      duration        = lookup(lookup(each.value, "alert", {}), "uptime_duration", "60s")
       threshold_value = lookup(lookup(each.value, "alert", {}), "threshold", 1)
       comparison      = "COMPARISON_GT"
       aggregations {
