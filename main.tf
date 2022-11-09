@@ -10,7 +10,7 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
   timeout      = lookup(each.value, "timeout", local.default_timeout)
   period       = lookup(each.value, "period", local.default_period)
 
-  selected_regions = lookup(each.value, "regions", []) //Global used by default
+  selected_regions = lookup(each.value, "regions", ["EUROPE", "ASIA_PACIFIC", "SOUTH_AMERICA"])
 
   http_check {
     path           = lookup(each.value, "path", "/health")
