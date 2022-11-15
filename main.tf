@@ -6,7 +6,7 @@ locals {
 resource "google_monitoring_uptime_check_config" "uptime_check_config" {
   for_each     = { for i in var.uptime_checks : i.service_name => i }
   display_name = each.value.service_name
-  project      = var.monitoring_project_id
+  project      = var.project_id
   timeout      = lookup(each.value, "timeout", local.default_timeout)
   period       = lookup(each.value, "period", local.default_period)
 
@@ -34,7 +34,7 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
   monitored_resource {
     type = lookup(each.value, "type", "uptime_url")
     labels = {
-      project_id = var.monitoring_project_id
+      project_id = var.project_id
       host = lookup(each.value, "hostname", null)
     }
   }
@@ -55,7 +55,7 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
 resource "google_monitoring_alert_policy" "uptime_check_alert_policy" {
   for_each = { for i in var.uptime_checks : i.service_name => i }
 
-  project               = var.monitoring_project_id
+  project               =  "${coalesce(var.project_id_alert, var.project_id)}"
   display_name          = "[P1] ${each.value.service_name} - Service is offline"
   notification_channels = var.notification_channels
   combiner              = "OR"
