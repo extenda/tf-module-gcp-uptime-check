@@ -15,11 +15,12 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| clan\_name | The name of the clan | `string` | `""` | no |
-| monitoring\_project\_id | Project ID to create monitoring resources in | `string` | "hiiretail-monitoring-prod-6500" | no |
-| notification\_channels | List of notificaton channel IDs | `list` | `[]` | no |
+| **clan\_name** | The name of the clan | `string` | `""` | no |
+| **project\_id** | Project ID to create monitoring resources in | `string` | n/a | yes |
+| **project\_id\_alert** | Optional: if you want the alert inside another project | `string` | "" | no |
+| **notification\_channels** | List of notificaton channel IDs | `list` | `[]` | no |
 | **project\_id** | Project ID to associate with uptime check | `string` | n/a | **yes** |
-| uptime\_check\_alerts | Configuration for uptime check alerts | `any` | `[]` | no |
+| **uptime\_check\_alerts** | Configuration for uptime check alerts | `any` | `[]` | no |
 | **uptime\_checks** | The list of uptime checks configurations | `any` | n/a | **yes** |
 
 **uptime_checks** supported attributes:

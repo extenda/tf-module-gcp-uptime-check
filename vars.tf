@@ -1,7 +1,12 @@
-variable monitoring_project_id {
+variable project_id {
   type        = string
-  description = "Project ID to create monitoring resources in"
-  default     = "hiiretail-monitoring-prod-6500"
+  description = "Project ID to create the monitoring resources in"
+}
+
+variable project_id_alert {
+  type        = string
+  description = "Optional: if you want the alert inside another project"
+  default     = ""
 }
 
 variable uptime_checks {
