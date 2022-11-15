@@ -55,8 +55,7 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
 resource "google_monitoring_alert_policy" "uptime_check_alert_policy" {
   for_each = { for i in var.uptime_checks : i.service_name => i }
 
-  # project               = var.project_id_alert ? var.project_id_alert : var.project_id
-  project               = length(var.project_id_alert) > 1 ? var.project_id_alert:  var.project_id
+  project               =  "${coalesce(var.project_id_alert, var.project_id)}"
   display_name          = "[P1] ${each.value.service_name} - Service is offline"
   notification_channels = var.notification_channels
   combiner              = "OR"
