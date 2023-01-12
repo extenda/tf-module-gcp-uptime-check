@@ -1,14 +1,14 @@
 locals {
-  default_timeout                = "10s"
-  default_period                 = "300s"
-  default_selected_regions       = ["EUROPE", "ASIA_PACIFIC", "SOUTH_AMERICA"]
-  default_accepted_status_class  = "STATUS_CLASS_2XX"
+  default_timeout               = "20s"
+  default_period                = "300s"
+  default_selected_regions      = ["EUROPE", "ASIA_PACIFIC", "SOUTH_AMERICA"]
+  default_accepted_status_class = "STATUS_CLASS_2XX"
 
   default_alert_duration         = "60s"
-  default_alert_threshold_value  = 1
-  default_alert_comparison       = "COMPARISON_GT"
-  default_trigger                = 1
   default_alert_alignment_period = "1200s"
+  default_alert_comparison       = "COMPARISON_GT"
+  default_alert_threshold_value  = 1
+  default_trigger                = 1
 
   fallback_notification_channels = [for nc in var.fallback_notification_channels : try(var.notification_channel_ids[nc], nc)]
 }
@@ -60,7 +60,9 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
     content {
       content = try(content_matchers.value.content, null)
       matcher = try(content_matchers.value.matcher, null)
+
       json_path_matcher {
+        for_each     = try([content_matchers.value.json_path_matcher], [])
         json_path    = try(content_matchers.value.json_path, "")
         json_matcher = try(content_matchers.value.json_matcher, null)
       }
@@ -89,10 +91,7 @@ resource "google_monitoring_alert_policy" "uptime_check_alert_policy" {
       duration        = try(each.value.alert.duration, local.default_alert_duration)
       threshold_value = try(each.value.alert.threshold_value, local.default_alert_threshold_value)
       comparison      = try(each.value.alert.comparison, local.default_alert_comparison)
-      /* filter          = <<EOT
-metric.type="monitoring.googleapis.com/uptime_check/check_passed" AND metric.label.check_id="${google_monitoring_uptime_check_config.uptime_check_config[each.value.service_name].uptime_check_id}" AND resource.type="uptime_url"
-      EOT */
-      filter          = <<EOT
+      filter = <<EOT
         metric.type="monitoring.googleapis.com/uptime_check/check_passed"
         resource.type="uptime_url"
         metric.label.check_id="${google_monitoring_uptime_check_config.uptime_check_config[each.value.service_name].uptime_check_id}"
