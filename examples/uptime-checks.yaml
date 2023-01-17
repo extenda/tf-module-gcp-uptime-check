@@ -1,9 +1,7 @@
 - service_name: my-app1
   hostname: my-app1.com
-- service_name: example
+- service_name: my-app2
   hostname: example.com
   path: /healthz
-  timeout: "60s"
-  period: "60s"
-  check_type: "HTTPS"
-  type: "uptime_url"
+  timeout: 60s
+  period: 60s
