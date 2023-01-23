@@ -62,7 +62,6 @@ resource "google_monitoring_uptime_check_config" "uptime_check_config" {
       matcher = try(content_matchers.value.matcher, null)
 
       json_path_matcher {
-        for_each     = try([content_matchers.value.json_path_matcher], [])
         json_path    = try(content_matchers.value.json_path, "")
         json_matcher = try(content_matchers.value.json_matcher, null)
       }
