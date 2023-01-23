@@ -1,59 +1,33 @@
-variable project_id {
+variable "project" {
   type        = string
   description = "Project ID to create the monitoring resources in"
 }
 
-variable project_id_alert {
+variable "default_alert_project" {
   type        = string
   description = "Optional: if you want the alert inside another project"
   default     = ""
 }
 
-variable uptime_checks {
-  type        = any
-  description = "The list of uptime checks configurations"
-}
-
-variable notification_channels {
-  type        = list(any)
-  description = "List of notificaton channel IDs"
-  default     = []
-}
-
-variable labels {
+variable "default_user_labels" {
   type        = map(any)
-  description = "Labels for the alert/s"
+  description = "User labels to be set for __all__ alerts"
   default     = {}
 }
 
-# After we update to terraform v1.3.0 we'll be able to use the structure below 
-# variable uptime_checks {
-#   type = list(object({
-#     service_name = string
-#     timeout = optional(string) // must be between 1 and 60 seconds
-#     period = optional(string) // supported 60s, 300s, 600s, 900s
-#     check_type = string // HTTP, HTTPS
-#     type = string // uptime_url
-#     hostname = string
-#     headers = optional(map(string))
-#     body = optional(string)
-#     content_type = optional(string) // TYPE_UNSPECIFIED and URL_ENCODED.
-#     path = string
-#     password = optional(string)
-#     username = optional(string)
-#     request_method = optional(string) //METHOD_UNSPECIFIED, GET, and POST.
-#     port = optional(string)
-#     use_ssl = optional(bool)
-#     validate_ssl = optional(bool)
-#     regions = optional(list(string))
-#     content = optional(string)
-#     matcher = optional(string) // CONTAINS_STRING, NOT_CONTAINS_STRING, MATCHES_REGEX, NOT_MATCHES_REGEX, MATCHES_JSON_PATH, and NOT_MATCHES_JSON_PATH
-#     json_path = optional(string)
-#     json_matcher = optional(string) // EXACT_MATCH and REGEX_MATCH
-#     alert = optional({
-#       uptime_duration = optional(string)
-#       threshold = optional(number))
-#      }
-#   }))
-#   description = "The list of uptime checks configurations"
-# }
+variable "fallback_notification_channels" {
+  type        = list(any)
+  description = "List of 'display names' or the IDs for NCs to be set for all alerts that don't provide 'notificaiton_channels'"
+  default     = []
+}
+
+variable "notification_channel_ids" {
+  type        = map(string)
+  description = "Enables you to provide the NCs 'display name' instead of full path, { display_name: full-path } or output from tf-module-gcp-notification-channels"
+  default     = {}
+}
+
+variable "uptime_checks" {
+  type        = any
+  description = "The list of uptime checks configurations"
+}
