@@ -1,5 +1,5 @@
 locals {
-  default_timeout               = "20s"
+  default_timeout               = "60s"
   default_period                = "300s"
   default_selected_regions      = ["EUROPE", "ASIA_PACIFIC", "SOUTH_AMERICA"]
   default_accepted_status_class = "STATUS_CLASS_2XX"
