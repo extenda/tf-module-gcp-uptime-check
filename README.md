@@ -47,6 +47,7 @@ uptime_checks = [
 
     alert = object({
       display_name          = optional(string)       // () : Name of the alert
+      priority              = optional(string)       // (P1) : Priority label used in the default display_name
       enabled               = optional(string)       // (true) : Whether or not the policy is enabled
       notification_channels = optional([string])     // ():  List of NCs to be set for the alert. Provide the NCs "full p ath" or "display name".
       duration              = optional(string)       // (120s) : The time that a time series must violate the threshold.
