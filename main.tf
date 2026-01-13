@@ -9,6 +9,7 @@ locals {
   default_alert_comparison       = "COMPARISON_GT"
   default_alert_threshold_value  = 1
   default_trigger                = 1
+  default_alert_priority         = "P1"
 
   fallback_notification_channels = [for nc in var.fallback_notification_channels : try(var.notification_channel_ids[nc], nc)]
 }
@@ -73,7 +74,10 @@ resource "google_monitoring_alert_policy" "uptime_check_alert_policy" {
   for_each = { for i in var.uptime_checks : i.service_name => i }
 
   project      = coalesce(var.default_alert_project, var.project)
-  display_name = try(each.value.alert.display_name, "[P1] ${each.value.service_name} - Service is offline")
+  display_name = try(
+    each.value.alert.display_name,
+    "[${try(each.value.alert.priority, local.default_alert_priority)}] ${each.value.service_name} - Service is offline"
+  )
   enabled      = try(each.value.alert.enabled, true)
   combiner     = "OR"
 
